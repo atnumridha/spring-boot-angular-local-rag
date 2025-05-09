@@ -1,0 +1,48 @@
+<div class="chat-container">
+  <!-- Header -->
+  <h1 class="chat-header">📄 Document Chat Assistant</h1>
+
+  <!-- Messages Container -->
+  <div class="messages-container">
+    <div *ngFor="let chat of chatHistory" class="message-bubble" [ngClass]="{'user-message': chat.sender === 'You', 'ai-message': chat.sender !== 'You'}">
+      <div class="message-icon">{{ chat.sender === 'You' ? '👤' : '🤖' }}</div>
+      <div class="message-content" [innerHTML]="chat.text | safeHtml"></div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div *ngIf="isStreaming" class="loading-indicator">
+      <div class="loader"></div>
+      <span>AI is thinking...</span>
+    </div>
+  </div>
+
+  <!-- Fixed Input Container -->
+  <div class="input-container">
+    <div class="input-group">
+      <input type="file"
+             (change)="onFileSelected($event)"
+             class="file-input"
+             id="fileInput" />
+      <label for="fileInput" class="file-label">
+        <svg class="file-icon" viewBox="0 0 24 24">
+          <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-3v3h-2v-3H8v-2h3v-3h2v3h3v2z"/>
+        </svg>
+      </label>
+
+      <input type="text"
+             [(ngModel)]="message"
+             (keydown.enter)="sendMessage()"
+             class="text-input"
+             placeholder="Type your message..." />
+
+      <button (click)="sendMessage()"
+              class="send-button"
+              [disabled]="!message.trim()">
+        Send
+        <svg class="send-icon" viewBox="0 0 24 24">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
